@@ -1,0 +1,69 @@
+{% extends 'layout.html' %}
+{% load staticfiles %}
+{% block content %}
+
+
+
+<button class="ui primary button fluid editor">
+    Write Something
+</button>
+
+
+
+
+
+
+
+
+
+<div class="ui fullscreen modal">
+    <i class="close icon"></i>
+    <div class="header">
+      Write Something
+    </div>
+    <div class="scrolling content">
+            <div class="ui fluid icon input" id="title">
+            <input type="text" placeholder="Title..." >
+            <i class="barcode icon"></i>
+          </div>
+          <br>
+
+        <div class="ui fluid" style="padding-left: 30px;padding-right:30px ">
+            <div class="my-editor"></div>
+        </div>
+    </div>
+    <div class="actions">
+      <div class="ui black deny button">
+        Close
+      </div>
+      <div class="ui positive right labeled icon button" id="write">
+        Write
+        <i class="checkmark icon"></i>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <!-- <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="{% static 'jquery.notebook.css' %}">
+
+<script type="text/javascript" src="{% static 'jquery.notebook.js' %}"></script> -->
+
+<!-- Import jQuery -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- Import Trumbowyg -->
+<script src="{%static 'bower_components/trumbowyg/dist/trumbowyg.min.js' %}"></script>
+<link rel="stylesheet" href="{%static 'bower_components/trumbowyg/dist/ui/trumbowyg.min.css' %}">
+
+
+
+<script type="text/javascript" src="{% static 'main.js' %}"></script>
+
+{% endblock content %}
+
+

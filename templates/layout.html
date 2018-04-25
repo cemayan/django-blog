@@ -1,0 +1,85 @@
+{%load staticfiles %}
+<!DOCTYPE html>
+{% if user.is_authenticated %}
+<html>
+<head>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <link rel="stylesheet" href="{% static 'semantic.min.css' %}">
+
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" ></script>
+  <!-- Site Properties -->
+  <title>Django blog</title>
+
+
+
+
+
+
+  <style type="text/css">
+  body {
+    background-color: #FFFFFF;
+  }
+  .ui.menu .item img.logo {
+    margin-right: 1.5em;
+  }
+  .main.container {
+    margin-top: 7em;
+  }
+  .wireframe {
+    margin-top: 2em;
+  }
+  .ui.footer.segment {
+    margin: 5em 0em 0em;
+    padding: 5em 0em;
+  }
+  </style>
+
+</head>
+<body>
+
+  <div class="ui fixed inverted menu">
+    <div class="ui container">
+      <a href="#" class="header item">
+        <!-- <img class="logo" src="assets/images/logo.png"> -->
+        Django Blog
+      </a>
+      <a href="/" class="item">Home</a>
+      <a href="/" class="item">Discover</a>
+
+      <div class="right menu">
+        <a href="/profile" class="item right">     {{ user.get_username }}</a>
+        <a href="/logout" class="item right">Logout
+        </a>
+  
+      </div>
+
+
+      
+    </div>
+  </div>
+
+  <div class="ui main text container">
+
+   
+          {% block content %} {% endblock %}
+
+
+  </div>
+
+ 
+
+   
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+
+  <script src="{% static 'semantic.min.js' %}"></script>
+
+
+</body>
+
+</html>
+
+{% endif %}
