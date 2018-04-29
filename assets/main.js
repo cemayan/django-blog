@@ -11,13 +11,13 @@ $('.editor').click(function(){
 
 var write_btn = document.querySelector("#write")
 var title = document.querySelector("#title")
-var content = document.querySelector(".my-editor")
+var content = $(".my-editor");
 
 write_btn.addEventListener('click',function(e){
 
-  if(title.textContent!="" && content.textContent!=""){
+  if(title.value!="" && content.textContent!=""){
     
-    
+    console.log({data:{title:title.value,html:content.trumbowyg('html')}})
   } 
   else{
     e.preventDefault()

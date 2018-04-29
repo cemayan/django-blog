@@ -12,30 +12,34 @@ from blog.serializers import  PostSerializer
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.core import serializers
-import redis
+import redis,json
 #from django.core.cache import cache
 
 VERSIONS = (1,)
 REDIS_DB = 2
 MAX_ACTIVITIES = 10
 
-r = redis.StrictRedis(host='localhost', port=6379, db=REDIS_DB)
+r = redis.StrictRedis(host='localhost', port=6379, db=REDIS_DB,charset="utf-8", decode_responses=True)
 
 class PostList(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
     permission_classes = (IsAuthenticated,)
 
-
-
-  
     def get(self, request, format=None):  
-        r.hmset("another_user", {'name': 'robert', 'age': 32})
-        #cache.set("foo","value",timeout=2500)   
-        #print(cache.get("foo"))
+
         posts =Post.objects.all()
         serializer = PostSerializer(posts,many=True)
-        return Response(serializer.data)  
+        cache_data = r.hgetall("POSTS")
 
+        if  cache_data :
+            for obj in json.loads(json.dumps(serializer.data)):
+                r.hset("POSTS",obj["id"],obj)
+            return Response(cache_data.values())
+        else :
+            for obj in json.loads(json.dumps(serializer.data)):
+                  r.hset("POSTS",obj["id"],obj)
+            return Response(json.loads(json.dumps(serializer.data)))
+            
 
     def post(self, request, format=None):
         serializer = PostSerializer(data=request.data)
@@ -59,8 +63,24 @@ class PostDetail(APIView):
 
     def get(self, request,pk, format=None):     
         posts =self.get_object(pk)
+        
         serializer = PostSerializer(posts)
-        return Response(serializer.data)
+        data = json.loads(json.dumps(serializer.data))
+
+        serializer_all = PostSerializer(Post.objects.all(),many=True)
+        all_data = json.loads(json.dumps(serializer_all.data))
+     
+        key = "POSTS" 
+        cache_data = eval(r.hget(key,pk))
+
+        if(data["id"] == cache_data["id"]):
+            print("cache")
+            return Response(cache_data)
+        else :  
+            print("cache değil")     
+            r.hset(key,data["id"],data)
+            return Response(serializer.data)
+
 
     def put(self, request, pk, format=None):  
           post_obj = self.get_object(pk)

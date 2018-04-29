@@ -9,8 +9,7 @@ class Profile(models.Model):
 
 
 class Post(models.Model):
-  title = models.CharField(max_length=120)
-  content = JSONField()
+  data = JSONField()
   created_date = models.DateTimeField(auto_now_add=True)
   user = models.ForeignKey(Profile,to_field='user',null=True,on_delete=None)
 
