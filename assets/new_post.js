@@ -16,6 +16,18 @@ var content = $(".my-editor");
 write_btn.addEventListener('click',function(e){
 
   if(title.value!="" && content.textContent!=""){
+
+    fetch('http://127.0.0.1:8000/api/',{
+      method: 'POST',
+      credentials: "same-origin",
+      headers: {
+          "X-CSRFToken": getCookie("csrftoken"),
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+      },
+      body : JSON.stringify({"data":{"title":title.value,"html":content.trumbowyg('html')}})
+      
+    })
     
     console.log({data:{title:title.value,html:content.trumbowyg('html')}})
   } 
@@ -23,6 +35,9 @@ write_btn.addEventListener('click',function(e){
     e.preventDefault()
   }
 })
+
+
+
 
 function getCookie(cname) {
   var name = cname + "=";
@@ -41,14 +56,4 @@ function getCookie(cname) {
 }
 
 
-fetch('/api',{
-  method: "get",
-  credentials: "same-origin",
-  headers: {
-      "X-CSRFToken": getCookie("csrftoken"),
-      "Accept": "application/json",
-      "Content-Type": "application/json"
-  }, 
-}).then(x=>x.json()).then(function(data){
-  console.log(data)
-})
+

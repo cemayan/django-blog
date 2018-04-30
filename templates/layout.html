@@ -9,11 +9,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <link rel="stylesheet" href="{% static 'semantic.min.css' %}">
 
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js" ></script>
+
   <!-- Site Properties -->
   <title>Django blog</title>
 
-
+ 
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" ></script>
 
 
 
@@ -69,16 +70,47 @@
 
   </div>
 
- 
-
-   
-  <script src="https://unpkg.com/vue/dist/vue.js"></script>
-
-
-  <script src="{% static 'semantic.min.js' %}"></script>
-
 
 </body>
+
+   
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+
+<script src="{% static 'semantic.min.js' %}"></script>
+
+<script>
+
+var vue = new Vue({
+  el : '#posts',
+  data: {
+    posts :null
+  },
+  created: function () {
+    this.fetchData()
+  },
+  methods: {
+    fetchData : function(){
+    var self= this  
+    fetch('/api',{
+        method: "get",
+        credentials: "same-origin",
+        headers: {
+            "X-CSRFToken": getCookie("csrftoken"),
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }, 
+      }).then(x=>x.json()).then(function(data){
+        self.posts = data
+      })
+
+    }
+  }
+})
+
+
+</script>
+
 
 </html>
 

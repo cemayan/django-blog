@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.postgres.fields import JSONField
-from blog.models import Post
+from blog.models import Post,Profile
+from rest_framework.fields import CurrentUserDefault
 
 class PostSerializer(serializers.ModelSerializer):
   user = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
@@ -9,3 +10,11 @@ class PostSerializer(serializers.ModelSerializer):
     fields = (
       'id','data','created_date','user'
     )
+  def save(self):
+    post = Post(
+      data = self.validated_data["data"],
+      user = Profile.objects.get(user_id = self.context.get("user_id"))
+    )
+    post.save()
+    return post
+
