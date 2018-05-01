@@ -21,11 +21,11 @@
     <div class="item" v-for="post in posts">
 
       <a class="ui tiny image">
-        <img :src=returnData(JSON.parse(post).user.image)>
+        <img :src="JSON.parse(post).user.image">
       </a>
       <div class="content">
-        <a class="header" v-html="returnData(JSON.parse(post).data.title)"></a>
-        <div class="description" v-html="returnData(JSON.parse(post).data.html)">
+        <a class="header" :href="'/posts/' + JSON.parse(post).id" v-html="JSON.parse(post).data.title"></a>
+        <div class="description" v-html="JSON.parse(post).data.html">
         </div>
       </div>
     </div>

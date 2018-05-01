@@ -30,9 +30,5 @@ var vue = new Vue({
           }
         })
     },
-
-    returnData : function(data){
-      return data
-    }
   }
 })
