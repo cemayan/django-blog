@@ -27,9 +27,8 @@ write_btn.addEventListener('click',function(e){
       },
       body : JSON.stringify({"data":{"title":title.value,"html":content.trumbowyg('html')}})
       
-    })
+    }).then(response => {if(response.ok){vue.fetchData()}})
     
-    console.log({data:{title:title.value,html:content.trumbowyg('html')}})
   } 
   else{
     e.preventDefault()

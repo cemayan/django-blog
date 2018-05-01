@@ -3,8 +3,16 @@ from django.contrib.postgres.fields import JSONField
 from blog.models import Post,Profile
 from rest_framework.fields import CurrentUserDefault
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = '__all__' 
+
+
+
 class PostSerializer(serializers.ModelSerializer):
-  user = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+  #user = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+  user = UserSerializer(many=False,read_only=True)
   class Meta:
     model = Post
     fields = (

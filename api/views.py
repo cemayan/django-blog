@@ -32,22 +32,26 @@ class PostList(APIView):
         cache_data = r.hgetall("POSTS")
 
         if  cache_data :
+
             #yeni kayıt gelince sadece o eklenecek, yani for lu kısım gitmesi lazım
-            # for obj in json.loads(json.dumps(serializer.data)):
-            #     r.hset("POSTS",obj["id"],obj)
-            return Response(cache_data.values())
-        else :
             for obj in json.loads(json.dumps(serializer.data)):
-                  r.hset("POSTS",obj["id"],obj)
-            return Response(json.loads(json.dumps(serializer.data)))
-            
+                  r.hset("POSTS",obj["id"],json.dumps(obj))
+            cache_data_last = r.hgetall("POSTS")      
+            return Response(cache_data_last.values())
+        else :
+            if posts :
+                for obj in json.loads(json.dumps(serializer.data)):
+                    r.hset("POSTS",obj["id"],json.dumps(obj))     
+                return Response(json.dumps(serializer.data))
+            else :    
+                return Response("")
 
     def post(self, request, format=None):
        
         serializer = PostSerializer(data=request.data,context={'user_id': request.user.id})
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(json.dumps(serializer.data), status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
