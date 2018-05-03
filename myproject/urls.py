@@ -20,6 +20,8 @@ from api import  views
 from blog.views import  home_view
 from account.views import login_view,register_view,logout_view
 from rest_framework.authtoken import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,5 +31,5 @@ urlpatterns = [
     url(r'^register/',register_view,name="account"),
     url(r'^login/',login_view,name="account"),
     url(r'^logout/',logout_view,name="logout"),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

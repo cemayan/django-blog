@@ -3,6 +3,8 @@
 {% block content %}
 
 
+<input type="hidden" id="user_id" value="{{ request.user.id}}">
+
 
 <button class="ui primary button fluid editor">
     Write Something
@@ -21,13 +23,22 @@
     <div class="item" v-for="post in posts">
 
       <a class="ui tiny image">
-        <img :src="JSON.parse(post).user.image">
+        <img :src="'/media/'+post.user.image">
       </a>
+
       <div class="content">
-        <a class="header" :href="'/posts/' + JSON.parse(post).id" v-html="JSON.parse(post).data.title"></a>
-        <div class="description" v-html="JSON.parse(post).data.html">
+        <a class="header" :href="'/posts/' + post.id" v-html="post.data.title"></a>
+        <div class="description" v-html="checkLimit(post.data.html)">
+         
         </div>
+       
       </div>
+
+      <div class="right floated column"  v-if="isAuthUser_(post.user.user)">
+          <i :class="trash"></i>
+      </div>
+
+
     </div>
   </div>
 

@@ -15,3 +15,6 @@ if(document.location.href.indexOf('login')>0){
     }
   })
 }
+
+
+

@@ -13,6 +13,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated
 from django.core import serializers
 import redis,json
+from django.http import JsonResponse
 #from django.core.cache import cache
 
 VERSIONS = (1,)
@@ -21,21 +22,17 @@ MAX_ACTIVITIES = 10
 
 r = redis.StrictRedis(host='localhost', port=6379, db=REDIS_DB,charset="utf-8", decode_responses=True)
 
+#TODO: Tüm metodların hata yakalama kontrolleri yapılacak
 class PostList(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):  
 
-        posts =Post.objects.all()
+        posts =Post.objects.all()     
         serializer = PostSerializer(posts,many=True)
         cache_data = r.hgetall("POSTS")
-
         if  cache_data :
-
-            #yeni kayıt gelince sadece o eklenecek, yani for lu kısım gitmesi lazım
-            for obj in json.loads(json.dumps(serializer.data)):
-                  r.hset("POSTS",obj["id"],json.dumps(obj))
             cache_data_last = r.hgetall("POSTS")      
             return Response(cache_data_last.values())
         else :
@@ -46,14 +43,13 @@ class PostList(APIView):
             else :    
                 return Response("")
 
-    def post(self, request, format=None):
-       
+    def post(self, request, format=None):   
         serializer = PostSerializer(data=request.data,context={'user_id': request.user.id})
         if serializer.is_valid():
-            serializer.save()
+            serializer_2 = PostSerializer(serializer.save())
+            r.hset("POSTS",serializer_2.data["id"],json.dumps(serializer_2.data))
             return Response(json.dumps(serializer.data), status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class PostDetail(APIView):
