@@ -3,7 +3,7 @@ $(document).ready(function() {
 });
 
 $('.editor').click(function(){
-  $('.ui.modal').modal('show');
+  $('.modal-post').modal('show');
 })
 
 
@@ -11,7 +11,7 @@ $('.editor').click(function(){
 
 var write_btn = document.querySelector("#write")
 var title = document.querySelector("#title")
-var content = $(".my-editor");
+var content = $("#editor_post");
 
 write_btn.addEventListener('click',function(e){
 

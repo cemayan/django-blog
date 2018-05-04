@@ -2,6 +2,9 @@
 {% load staticfiles %}
 {% block content %}
 
+<link rel="stylesheet" href="{% static 'bower_components/jquery-confirm2/dist/jquery-confirm.min.css' %}">
+<script src="{% static 'bower_components/jquery-confirm2/dist/jquery-confirm.min.js' %}"></script>
+
 
 <input type="hidden" id="user_id" value="{{ request.user.id}}">
 
@@ -35,7 +38,8 @@
       </div>
 
       <div class="right floated column"  v-if="isAuthUser_(post.user.user)">
-          <i :class="trash"></i>
+          <i :class="edit" v-on:click="editPost(post.id)"></i>
+          <i :class="trash" v-on:click="deletePost(post.id)"></i>
       </div>
 
 
@@ -49,7 +53,7 @@
 
 
 
-<div class="ui fullscreen modal">
+<div class="ui fullscreen modal modal-post">
     <i class="close icon"></i>
     <div class="header">
       Write Something
@@ -62,7 +66,7 @@
           <br>
 
         <div class="ui fluid" style="padding-left: 30px;padding-right:30px ">
-            <div class="my-editor"></div>
+            <div class="my-editor" id="editor_post"></div>
         </div>
     </div>
     <div class="actions">
@@ -75,6 +79,63 @@
       </div>
     </div>
   </div>
+
+
+
+
+  <div class="ui fullscreen modal modal-edit">
+      <i class="close icon"></i>
+      <div class="header">
+       Edit
+      </div>
+      <div class="scrolling content">
+              <div class="ui fluid icon input" >
+              <input type="text" placeholder="Title..." id="title_edit"   >
+              <i class="barcode icon"></i>
+            </div>
+            <br>
+  
+          <div class="ui fluid" style="padding-left: 30px;padding-right:30px ">
+              <div class="my-editor" id="editor_edit"></div>
+          </div>
+      </div>
+      <div class="actions">
+        <div class="ui black deny button">
+          Close
+        </div>
+        <div class="ui positive right labeled icon button" id="update">
+          Update
+          <i class="checkmark icon"></i>
+        </div>
+      </div>
+    </div>
+  
+
+<!-- 
+
+
+  <div class="ui basic modal">
+    <div class="ui icon header">
+      <i class="archive icon"></i>
+      Archive Old Messages
+    </div>
+    <div class="content">
+      <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>
+    </div>
+    <div class="actions">
+      <div class="ui red basic cancel inverted button">
+        <i class="remove icon"></i>
+        No
+      </div>
+      <div class="ui green ok inverted button">
+        <i class="checkmark icon"></i>
+        Yes
+      </div>
+    </div>
+  </div>   -->
+
+
+
 
 
 

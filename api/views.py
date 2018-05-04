@@ -94,5 +94,6 @@ class PostDetail(APIView):
 
     def delete(self, request, pk, format=None):
           post_obj = self.get_object(pk)
+          r.hdel("POSTS",pk)
           post_obj.delete()
           return Response(status=status.HTTP_204_NO_CONTENT)
