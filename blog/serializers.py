@@ -18,11 +18,28 @@ class PostSerializer(serializers.ModelSerializer):
     fields = (
       'id','data','created_date','user'
     )
+  def get_post(self):
+    post = Post(
+      data = Post.objects.get(id = self.context.get("id")),
+      user = Profile.objects.get(user_id = self.context.get("user_id"))
+    )
+    return post
+
   def save(self):
     post = Post(
       data = self.validated_data["data"],
       user = Profile.objects.get(user_id = self.context.get("user_id"))
     )
-    post.save()
-    return post
+    if self.context.get("method")=='PUT':
+        _post = Post.objects.filter(id = self.context.get("id")).update(data=self.validated_data["data"])
+        post = Post(
+          id = self.context.get("id"),
+          data = self.validated_data["data"],
+          user = Profile.objects.get(user_id = self.context.get("user_id"))
+        )
+        return post
+        
+    else :  
+      post.save()
+      return post
 

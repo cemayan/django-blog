@@ -117,7 +117,7 @@ if(document.location.pathname =="/"){
      },
      updatePost : function(obj){
       var self= this  
-      fetch('http://127.0.0.1:8000/api/',{
+      fetch('http://127.0.0.1:8000/api/'+self.id +'/',{
         method: 'PUT',
         credentials: "same-origin",
         headers: {
@@ -125,7 +125,7 @@ if(document.location.pathname =="/"){
             "Accept": "application/json",
             "Content-Type": "application/json"
         },
-        body : JSON.stringify({"id":self.id,"data":{"title": self.title,"html":self.html}})
+        body : JSON.stringify({"id":self.id,"data":{"title": self.title,"html":$('#editor').trumbowyg('html')}})
 
       }).then(response => {if(response.ok){self.fetchData()}  })
      }

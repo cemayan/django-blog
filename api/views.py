@@ -85,10 +85,10 @@ class PostDetail(APIView):
 
 
     def put(self, request, pk, format=None):  
-          post_obj = self.get_object(pk)
-          serializer = PostSerializer(post_obj, data=request.data)
+          serializer = PostSerializer(data=request.data,context={'user_id': request.user.id,'method':'PUT','id':pk})
           if serializer.is_valid():
-              serializer.save()
+              serializer_2 = PostSerializer(serializer.save())
+              r.hset("POSTS",pk,json.dumps(serializer_2.data))
               return Response(serializer.data)
           return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

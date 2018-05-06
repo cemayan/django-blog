@@ -7,8 +7,10 @@ $(document).ready(function() {
   $('.my-editor').trumbowyg();
 });
 
+
 $('.editor').click(function(){
   document.querySelector("#title").value = ""
+  vue.title = ""
   $("#editor").trumbowyg('empty');
 
   $('.modal').modal('show');
