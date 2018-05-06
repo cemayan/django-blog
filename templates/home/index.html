@@ -2,9 +2,6 @@
 {% load staticfiles %}
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'bower_components/jquery-confirm2/dist/jquery-confirm.min.css' %}">
-<script src="{% static 'bower_components/jquery-confirm2/dist/jquery-confirm.min.js' %}"></script>
-
 
 <input type="hidden" id="user_id" value="{{ request.user.id}}">
 
@@ -47,68 +44,61 @@
   </div>
 
 
+
+
+  <div class="ui fullscreen modal">
+      <i class="close icon"></i>
+      <div class="header">
+        Write Something
+      </div>
+      <div class="scrolling content">
+              <div class="ui fluid icon input" >
+              <input type="text" placeholder="Title..." id="title" v-model="title"   >
+              <i class="barcode icon"></i>
+            </div>
+            <br>
+  
+          <div class="ui fluid" style="padding-left: 30px;padding-right:30px ">
+              <div class="my-editor" id="editor"  ></div>
+          </div>
+      </div>
+      <div class="actions">
+        <div class="ui black deny button">
+          Close
+        </div>  
+        <div class="ui positive right labeled icon button" id="submit-post"  v-if="postStatus" v-on:click="createPost">
+          Write
+          <i class="checkmark icon"></i>
+        </div>
+  
+        <div class="ui positive right labeled icon button" id="submit-edit" v-on:click="updatePost"  v-else>
+            Update
+            <i class="checkmark icon"></i>
+          </div>
+  
+      </div>
+    </div>
+  
+
+
+
+
+
+
+
+
+
+
+
 </div>
 
 {%endverbatim%}
 
 
 
-<div class="ui fullscreen modal modal-post">
-    <i class="close icon"></i>
-    <div class="header">
-      Write Something
-    </div>
-    <div class="scrolling content">
-            <div class="ui fluid icon input" >
-            <input type="text" placeholder="Title..." id="title" >
-            <i class="barcode icon"></i>
-          </div>
-          <br>
-
-        <div class="ui fluid" style="padding-left: 30px;padding-right:30px ">
-            <div class="my-editor" id="editor_post"></div>
-        </div>
-    </div>
-    <div class="actions">
-      <div class="ui black deny button">
-        Close
-      </div>
-      <div class="ui positive right labeled icon button" id="write">
-        Write
-        <i class="checkmark icon"></i>
-      </div>
-    </div>
-  </div>
 
 
 
-
-  <div class="ui fullscreen modal modal-edit">
-      <i class="close icon"></i>
-      <div class="header">
-       Edit
-      </div>
-      <div class="scrolling content">
-              <div class="ui fluid icon input" >
-              <input type="text" placeholder="Title..." id="title_edit"   >
-              <i class="barcode icon"></i>
-            </div>
-            <br>
-  
-          <div class="ui fluid" style="padding-left: 30px;padding-right:30px ">
-              <div class="my-editor" id="editor_edit"></div>
-          </div>
-      </div>
-      <div class="actions">
-        <div class="ui black deny button">
-          Close
-        </div>
-        <div class="ui positive right labeled icon button" id="update">
-          Update
-          <i class="checkmark icon"></i>
-        </div>
-      </div>
-    </div>
   
 
 <!-- 
