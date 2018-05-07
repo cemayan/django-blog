@@ -5,15 +5,17 @@ var vue_detail = new Vue({
     title :null,
     html : null,
     created_date :null,
-    user :null
+    user :null,
+    comments:null
   },
   mounted: function () {
     this.fetchData()
+    this.fetchCommentData()
   },
   methods: {
     fetchData : function(){
       var self= this  
-      fetch('/api/'+document.location.pathname.split("/")[2],{
+      fetch('/api/post/'+document.location.pathname.split("/")[2],{
           method: "get",
           credentials: "same-origin",
           headers: {
@@ -28,6 +30,23 @@ var vue_detail = new Vue({
             self.user = data_.user
         })
     },
+    fetchCommentData : function(){
+      var self= this  
+      fetch('/api/comment/'+document.location.pathname.split("/")[2] ,{
+          method: "get",
+          credentials: "same-origin",
+          headers: {
+              "X-CSRFToken": getCookie("csrftoken"),
+              "Accept": "application/json",
+              "Content-Type": "application/json"
+          }, 
+        })
+        .then(x=>x.json()).then(function(data){
+            self.comments = JSON.parse(data)
+        })
+    }
+
+
   }
 })
 }

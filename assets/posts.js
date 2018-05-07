@@ -11,6 +11,7 @@ if(document.location.pathname =="/"){
       html : "",
       created_date :null,
       user : null,
+      image : null,
       id:0,
       postStatus : true
     },
@@ -22,7 +23,7 @@ if(document.location.pathname =="/"){
 
       fetchData : function(){
         var self= this  
-        fetch('/api',{
+        fetch('/api/post/',{
             method: "get",
             credentials: "same-origin",
             headers: {
@@ -57,7 +58,7 @@ if(document.location.pathname =="/"){
      },
      createPost: function(data){
 
-      fetch('http://127.0.0.1:8000/api/',{
+      fetch('http://127.0.0.1:8000/api/post/',{
         method: 'POST',
         credentials: "same-origin",
         headers: {
@@ -74,7 +75,7 @@ if(document.location.pathname =="/"){
       vue.postStatus = false
       $('.modal').modal('show');
       var self= this  
-      fetch('/api/'+pk,{
+      fetch('/api/post/'+pk,{
           method: "get",
           credentials: "same-origin",
           headers: {
@@ -99,7 +100,7 @@ if(document.location.pathname =="/"){
      },
      deletePost : function(pk){
       var self= this  
-      fetch('/api/'+pk,{
+      fetch('/api/post/'+pk,{
         method: "delete",
         credentials: "same-origin",
         headers: {
@@ -117,7 +118,7 @@ if(document.location.pathname =="/"){
      },
      updatePost : function(obj){
       var self= this  
-      fetch('http://127.0.0.1:8000/api/'+self.id +'/',{
+      fetch('http://127.0.0.1:8000/api/post/'+self.id +'/',{
         method: 'PUT',
         credentials: "same-origin",
         headers: {

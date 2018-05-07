@@ -3,12 +3,12 @@ from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from blog.models import Post
+from blog.models import Post,Comment
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from blog.serializers import  PostSerializer
+from blog.serializers import  PostSerializer,CommentSerializer
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.core import serializers
@@ -30,6 +30,7 @@ class PostList(APIView):
     def get(self, request, format=None):  
 
         posts =Post.objects.all()     
+        
         serializer = PostSerializer(posts,many=True)
         cache_data = r.hgetall("POSTS")
         if  cache_data :
@@ -53,6 +54,7 @@ class PostList(APIView):
 
 
 class PostDetail(APIView):
+    
     authentication_classes = (SessionAuthentication,BasicAuthentication)
     permission_classes = (IsAuthenticated,)
 
@@ -97,3 +99,45 @@ class PostDetail(APIView):
           r.hdel("POSTS",pk)
           post_obj.delete()
           return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CommentList(APIView):
+    authentication_classes = (SessionAuthentication,BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self,request,format=None):
+        serializer = CommentSerializer(data=request.data,context= {'user_id':request.user.id})
+       
+        if serializer.is_valid():
+             serializer_2 = CommentSerializer(serializer.save())
+             r.hset("COMMENTS",serializer_2.data["id"],json.dumps(serializer_2.data))
+             return Response(json.dumps(serializer.data), status=status.HTTP_201_CREATED) 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+
+
+class CommentDetail(APIView):
+    authentication_classes = (SessionAuthentication,BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+
+
+    def get(self,request,pk,format=None):
+        comment = Comment.objects.filter(post_id=pk)
+        serializer = CommentSerializer(comment,many=True)
+        return Response(json.dumps(serializer.data))
+        #redis'ten gelecek burada(array şeklinde gelneli yani tüm o id'ler)
+        # cache_data = r.hgetall("COMMENTS")
+        # if  cache_data :
+        #     cache_data_last = r.hgetall("COMMENTS")      
+        #     return Response(cache_data_last.values())
+        # else :
+        #     if posts :
+        #         for obj in json.loads(json.dumps(serializer.data)):
+        #             r.hset("COMMENTS",obj["id"],json.dumps(obj))     
+        #         return Response(json.dumps(serializer.data))
+        #     else :    
+        #         return Response("")
+
+
+
+
+

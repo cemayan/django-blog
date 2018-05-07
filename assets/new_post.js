@@ -25,7 +25,7 @@ $('.editor').click(function(){
 write_btn.addEventListener('click',function(e){
 
 
-  fetch('http://127.0.0.1:8000/api/',{
+  fetch('http://127.0.0.1:8000/api/post/',{
     method: 'POST',
     credentials: "same-origin",
     headers: {

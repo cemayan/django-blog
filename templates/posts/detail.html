@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-
+{% load staticfiles %}
 {% block content %}
 
 <div id="post_detail">
@@ -14,17 +14,17 @@
 
  <div class="ui small comments">
   <h3 class="ui dividing header">Comments</h3>
-  <div class="comment">
+  <div class="comment"  v-for="comment in comments">
     <a class="avatar">
-      <img src="https://semantic-ui.com/views/comment.html/images/avatar/small/matt.jpg">
+      <img :src="'/media/'+comment.user.image">
     </a>
     <div class="content">
-      <a class="author">Matt</a>
+      <a class="author" v-html="comment.user.user.username" ></a>
       <div class="metadata">
-        <span class="date">Today at 5:42PM</span>
+        <span class="date" v-html="Date(comment.created_date)"></span>
       </div>
-      <div class="text">
-        How artistic!
+      <div class="text" v-html="comment.data.comment">
+
       </div>
       <div class="actions">
         <a class="reply">Reply</a>
@@ -34,9 +34,9 @@
 
   <form class="ui reply form">
     <div class="field">
-      <textarea></textarea>
+      <textarea id="comment"></textarea>
     </div>
-    <div class="ui blue labeled submit icon button">
+    <div class="ui blue labeled submit icon button" id="reply_button">
       <i class="icon edit"></i> Add Reply
     </div>
   </form>
@@ -44,5 +44,8 @@
 
 {%endverbatim%}
 </div>
+
+
+<script type="text/javascript" src="{% static 'new_comment.js' %}"></script>
 
 {% endblock content %}

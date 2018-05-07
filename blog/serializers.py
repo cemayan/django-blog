@@ -1,18 +1,30 @@
 from rest_framework import serializers
 from django.contrib.postgres.fields import JSONField
-from blog.models import Post,Profile
+from blog.models import Post,Profile,Comment
+from django.contrib.auth.models import User
 from rest_framework.fields import CurrentUserDefault
 
 class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = '__all__' 
+  class Meta:
+    model = User
+    fields = (
+      'username','id'
+    )
 
+
+class ProfileSerializer(serializers.ModelSerializer):
+  user = UserSerializer(many=False,read_only=True)
+  class Meta:
+        model = Profile
+        #fields = '__all__' 
+        fields= (
+          'user','image'
+        )
 
 
 class PostSerializer(serializers.ModelSerializer):
   #user = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
-  user = UserSerializer(many=False,read_only=True)
+  user = ProfileSerializer(many=False,read_only=True)
   class Meta:
     model = Post
     fields = (
@@ -43,3 +55,27 @@ class PostSerializer(serializers.ModelSerializer):
       post.save()
       return post
 
+class PostSerializer2(serializers.ModelSerializer):
+    class Meta:
+      model = Post
+      fields = (
+        'id',
+      )
+
+
+class CommentSerializer(serializers.ModelSerializer):
+  #post= PostSerializer(many=False)
+  user = ProfileSerializer(many=False,read_only=True)
+  class Meta: 
+    model = Comment
+    fields  =('id','created_date','post','data','user'
+    )
+  def save(self):
+
+    comment = Comment(
+      data = self.validated_data["data"],
+      user = Profile.objects.get(user_id = self.context.get("user_id")),
+      post = Post.objects.get(id = self.data["post"])
+    )
+    comment.save()
+    return comment

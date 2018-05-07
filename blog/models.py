@@ -14,3 +14,8 @@ class Post(models.Model):
   created_date = models.DateTimeField(auto_now_add=True)
   user = models.ForeignKey(Profile,to_field='user',null=True,on_delete=None)
 
+class Comment(models.Model): 
+  data = JSONField(null=True)
+  created_date = models.DateTimeField(auto_now_add=True)
+  post = models.ForeignKey(Post,to_field='id',null=False,on_delete=None)
+  user = models.ForeignKey(Profile,to_field='user',null=True,on_delete=None)
